@@ -1,0 +1,7 @@
+.DS_Store
+/.idea
+/.bundle
+/log/*.log
+/pkg
+/tmp
+/test/reports
