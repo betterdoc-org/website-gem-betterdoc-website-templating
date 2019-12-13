@@ -3,6 +3,7 @@ AllCops:
     - 'db/**/*.rb'
     - 'vendor/**/*'
     - 'bin/*'
+    - 'spec/**/*'
 
 Metrics/AbcSize:
   Max: 35
