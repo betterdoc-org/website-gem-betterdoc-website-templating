@@ -19,6 +19,8 @@ Gem::Specification.new do |spec|
   end
 
   spec.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
+  spec.add_development_dependency 'rspec-rails', '~> 3.9.0'
+  spec.add_development_dependency 'rspec_junit_formatter', '~> 0.4.1'
   spec.add_development_dependency 'rubocop', '~> 0.77.0'
   spec.add_development_dependency 'rubocop-junit-formatter', '~> 0.1.4'
   spec.add_development_dependency 'rubocop-performance', '~> 1.5.1'

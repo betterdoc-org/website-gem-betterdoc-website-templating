@@ -91,7 +91,9 @@ class HelloWorldController < ApplicationController
   def resolve_template(service_content)
     template_engine = Betterdoc::Templating::Engine.new
     template_engine.template_location = "http://www.example.com/test/template"
-    template_engine.resolve(service_content) 
+    template_engine.content = service_content
+    template_engine.title = "The page title"
+    template_engine.resolve_template 
   end
 
 end
@@ -109,6 +111,10 @@ If they are not set explicitely, most of them have a default setting that will b
 Required means that the value **must** be set either explicitely or by having an environment variable. 
 If none is provided the `resolve` method call will fail with an exception.
 
-| Property | Default environment variable | Required | Type |
-| -------- | ---------------------------- | -------- | ---- |
-| `template_location` | `TEMPLATING_TEMPLATE_LOCATION` | Yes | The location of the template that should be used during the evaluation. If this location starts with either `http` or `https` it will be considered a URL and will be loaded from the specified endpoint over the network. In all other case the location is being considered a file on the local file system. |
+| Property | Default environment variable | Required | Default | Type |
+| -------- | ---------------------------- | -------- | ------- | ---- |
+| `template_location` | `TEMPLATING_TEMPLATE_LOCATION` | Yes | | The location of the template that should be used during the evaluation. If this location starts with either `http` or `https` it will be considered a URL and will be loaded from the specified endpoint over the network. In all other case the location is being considered a file on the local file system. |
+| `content` |  | Yes | | The content to be used. |
+| `content_placeholder` | `TEMPLATING_CONTENT_PLACEHOLDER` | No | `INCLUDE_CONTENT_HERE` | The placeholder within the template that should be replaced with the content from the service. |
+| `title` | `TEMPLATING_TITLE` | No | `BetterDoc` | The title to be used. |
+| `title_placeholder` | `TEMPLATING_TITLE_PLACEHOLDER` | No | `INCLUDE_TITLE_HERE` | The placeholder within the template that should be replaced with the title. |
