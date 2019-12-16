@@ -49,7 +49,7 @@ module Betterdoc
       def replace_in_template_by_insert_before(template, needle, value)
         if value
           index_of_needle = template.index(needle)
-          if index_of_needle && index_of_needle > 0
+          if index_of_needle && index_of_needle.positive?
             "#{template[0, index_of_needle]}\n#{value}\n#{template[index_of_needle..-1]}"
           else
             template
