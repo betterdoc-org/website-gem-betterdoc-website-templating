@@ -1,0 +1,11 @@
+version: 2.1
+
+orbs:
+  recipe: "betterdoc/recipes-ruby@4"
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - recipe/build-rails-rspec:
+          name: "build"
