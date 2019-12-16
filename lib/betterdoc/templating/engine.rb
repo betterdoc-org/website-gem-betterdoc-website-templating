@@ -32,7 +32,6 @@ module Betterdoc
         resolved_content = replace_in_template_by_insert_before(resolved_content, '</head>', @additional_head_content)
         resolved_content = replace_in_template_by_insert_before(resolved_content, '</body>', @additional_body_content)
         resolved_content
-
       end
       # rubocop:enable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
 
