@@ -22,10 +22,10 @@ describe Betterdoc::Templating::Engine do
         resolved_content = @engine.resolve_content
         expect(resolved_content).to eq ('aa this is the title bb this is the content cc')
       end
-      it "should resolve the content but use keep the title placeholder as the title is nil" do
+      it "should resolve the content and use the default title as the configured title is nil" do
         @engine.title = nil
         resolved_content = @engine.resolve_content
-        expect(resolved_content).to eq ('aa TITLE_PLACEHOLDER bb this is the content cc')
+        expect(resolved_content).to eq ('aa BetterDoc bb this is the content cc')
       end
       describe "with additional values for head and body" do
         before do

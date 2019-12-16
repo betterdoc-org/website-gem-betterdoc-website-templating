@@ -28,7 +28,7 @@ module Betterdoc
         template_content = template_loader.load_template
 
         resolved_content = replace_in_template_by_placeholder(template_content, content_placeholder, @content)
-        resolved_content = replace_in_template_by_placeholder(resolved_content, title_placeholder, @title || ENV['TEMPLATING_TITLE'])
+        resolved_content = replace_in_template_by_placeholder(resolved_content, title_placeholder, @title || ENV['TEMPLATING_TITLE'] || "BetterDoc")
         resolved_content = replace_in_template_by_insert_before(resolved_content, '</head>', @additional_head_content)
         resolved_content = replace_in_template_by_insert_before(resolved_content, '</body>', @additional_body_content)
         resolved_content
