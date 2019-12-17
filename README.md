@@ -114,6 +114,8 @@ If none is provided the `resolve` method call will fail with an exception.
 | Property | Default environment variable | Required | Default | Type |
 | -------- | ---------------------------- | -------- | ------- | ---- |
 | `template_location` | `TEMPLATING_TEMPLATE_LOCATION` | Yes | | The location of the template that should be used during the evaluation. If this location starts with either `http` or `https` it will be considered a URL and will be loaded from the specified endpoint over the network. In all other case the location is being considered a file on the local file system. |
+| `template_auth_username` | `TEMPLATING_AUTH_USERNAME` | No | | The username to be used when accessing the template via network using HTTP basic auth. |
+| `template_auth_password` | `TEMPLATING_AUTH_PASSWORD` | No | | The password to be used when accessing the template via network using HTTP basic auth. |
 | `content` |  | Yes | | The content to be used. |
 | `content_placeholder` | `TEMPLATING_CONTENT_PLACEHOLDER` | No | `INCLUDE_CONTENT_HERE` | The placeholder within the template that should be replaced with the content from the service. |
 | `title` | `TEMPLATING_TITLE` | No | `BetterDoc` | The title to be used. |

@@ -8,6 +8,8 @@ module Betterdoc
     class Engine
 
       attr_accessor :template_location
+      attr_accessor :template_auth_username
+      attr_accessor :template_auth_password
       attr_accessor :content
       attr_accessor :content_placeholder
       attr_accessor :title
@@ -60,7 +62,10 @@ module Betterdoc
 
       def compute_template_loader(location)
         if location.start_with?('http') || location.start_with?('https')
-          Betterdoc::Templating::Loaders::NetworkTemplateLoader.new(location)
+          template_loader = Betterdoc::Templating::Loaders::NetworkTemplateLoader.new(location)
+          template_loader.http_auth_username = @template_auth_username || ENV['TEMPLATING_AUTH_USERNAME']
+          template_loader.http_auth_password = @template_auth_password || ENV['TEMPLATING_AUTH_PASSWORD']
+          template_loader
         else
           Betterdoc::Templating::Loaders::LocalTemplateLoader.new(location)
         end

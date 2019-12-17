@@ -7,16 +7,23 @@ module Betterdoc
     module Loaders
       class NetworkTemplateLoader
 
+        attr_accessor :http_auth_username
+        attr_accessor :http_auth_password
+
         def initialize(url)
           @url = url
         end
 
         def load_template
-          response = Net::HTTP.get_response(URI(@url))
-          raise Betterdoc::Templating::Errors::TemplateNotFoundError, "Cannot find template at URL: #{@url}" if response.code.to_i == 404
-          raise Betterdoc::Templating::Errors::TemplateLoadingError, "Cannot load template from URL '#{@url}' (HTTP error #{response.code})" unless response.code.to_i == 200
 
-          response.body
+          http_headers = {}
+          http_headers['Authorization'] = "Basic #{strict_encode64("#{@http_auth_username}:#{@http_auth_password}")}" if @http_auth_username&.length&.positive?
+
+          http_response = HTTParty.get(@url, headers: http_headers)
+          raise Betterdoc::Templating::Errors::TemplateNotFoundError, "Cannot find template at URL: #{@url}" if http_response.code == 404
+          raise Betterdoc::Templating::Errors::TemplateLoadingError, "Cannot load template from URL '#{@url}' (HTTP error #{http_response.code})" unless http_response.code == 200
+
+          http_response.body
         end
 
       end
