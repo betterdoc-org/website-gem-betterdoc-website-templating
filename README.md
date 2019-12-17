@@ -24,7 +24,7 @@ Our first **target** HTML page that is delivered to a users browser should look 
 ```html
 <html>
   <head>
-    <link rel="stylehseet" type="text/css" href="/where/the/css/lives.css" />
+    <link rel="stylesheet" type="text/css" href="/where/the/css/lives.css" />
   </head>
   <body>
     <header>Welcome at BetterDoc!</header>
@@ -41,7 +41,7 @@ Our second **target** HTML page should look like this:
 ```html
 <html>
   <head>
-    <link rel="stylehseet" type="text/css" href="/where/the/css/lives.css" />
+    <link rel="stylesheet" type="text/css" href="/where/the/css/lives.css" />
   </head>
   <body>
     <header>Welcome at BetterDoc!</header>
@@ -89,7 +89,7 @@ class HelloWorldController < ApplicationController
   end
 
   def resolve_template(service_content)
-    template_engine = Betterdoc::Templating::Engine.new
+    template_engine = Betterdoc::Website::Templating::Engine.new
     template_engine.template_location = "http://www.example.com/test/template"
     template_engine.content = service_content
     template_engine.title = "The page title"
@@ -101,11 +101,26 @@ end
 
 The `Engine` takes care of loading the content from the remote template (in our example that's from the URL `http://www.example.com/test/template`) and replacing the placeholders in that content with the new values that should be sent to the browser.
 
+## Rails
+
+With the context of Rails the Gem will automatically initialize a concern so that the method `render_in_website_template` is available in all controllers.
+
+```ruby
+class ExampleController < ApplicationController
+
+  def foo
+    render_in_website_template('your_template')
+  end
+
+end
+```
+
+
 ## Configuration
 
 The `Engine` can be configured with a set properties that specify how the replacement will be performed.
 
-The following properties can be set at an `Betterdoc::Templating::Engine` object. 
+The following properties can be set at an `Betterdoc::Website::Templating::Engine` object. 
 If they are not set explicitely, most of them have a default setting that will be loaded from an environment variable.
 
 Required means that the value **must** be set either explicitely or by having an environment variable. 

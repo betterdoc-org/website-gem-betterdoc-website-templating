@@ -1,15 +1,15 @@
 require "spec_helper"
-require "betterdoc/templating/engine"
-require "betterdoc/templating/loaders/local_template_loader"
-require "betterdoc/templating/loaders/network_template_loader"
+require "betterdoc/website/templating/engine"
+require "betterdoc/website/templating/loaders/local_template_loader"
+require "betterdoc/website/templating/loaders/network_template_loader"
 
-describe Betterdoc::Templating::Engine do
+describe Betterdoc::Website::Templating::Engine do
 
   describe "#resolve_content" do
     before do
       @template_loader = double
       allow(@template_loader).to receive(:load_template).and_return('aa TITLE_PLACEHOLDER bb CONTENT_PLACEHOLDER cc')
-      @engine = Betterdoc::Templating::Engine.new
+      @engine = Betterdoc::Website::Templating::Engine.new
       @engine.template_location = 'foo'
       @engine.content_placeholder = 'CONTENT_PLACEHOLDER'
       @engine.content = 'this is the content'
@@ -63,30 +63,30 @@ describe Betterdoc::Templating::Engine do
     describe "with invalid configuration" do
       it "should raise an error if the content is nil" do
         @engine.content = nil
-        expect { @engine.resolve_content }.to raise_error(Betterdoc::Templating::Errors::ConfigurationError)
+        expect { @engine.resolve_content }.to raise_error(Betterdoc::Website::Templating::Errors::ConfigurationError)
       end
       it "should raise an error if the template location is nil" do
         @engine.template_location = nil
-        expect { @engine.resolve_content }.to raise_error(Betterdoc::Templating::Errors::ConfigurationError)
+        expect { @engine.resolve_content }.to raise_error(Betterdoc::Website::Templating::Errors::ConfigurationError)
       end
     end
   end
 
   describe "#compute_template_loader" do
     it "should return a network template loader for http values" do
-      engine = Betterdoc::Templating::Engine.new
+      engine = Betterdoc::Website::Templating::Engine.new
       template_loader = engine.send(:compute_template_loader, "http://www.example.com")
-      expect(template_loader).to be_an_instance_of(Betterdoc::Templating::Loaders::NetworkTemplateLoader)
+      expect(template_loader).to be_an_instance_of(Betterdoc::Website::Templating::Loaders::NetworkTemplateLoader)
     end
     it "should return a network template loader for https values" do
-      engine = Betterdoc::Templating::Engine.new
+      engine = Betterdoc::Website::Templating::Engine.new
       template_loader = engine.send(:compute_template_loader, "https://www.example.com")
-      expect(template_loader).to be_an_instance_of(Betterdoc::Templating::Loaders::NetworkTemplateLoader)
+      expect(template_loader).to be_an_instance_of(Betterdoc::Website::Templating::Loaders::NetworkTemplateLoader)
     end
     it "should return a load template loader for other values" do
-      engine = Betterdoc::Templating::Engine.new
+      engine = Betterdoc::Website::Templating::Engine.new
       template_loader = engine.send(:compute_template_loader, "xyz")
-      expect(template_loader).to be_an_instance_of(Betterdoc::Templating::Loaders::LocalTemplateLoader)
+      expect(template_loader).to be_an_instance_of(Betterdoc::Website::Templating::Loaders::LocalTemplateLoader)
     end
   end
 
