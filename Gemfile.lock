@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    betterdoc-website-templating (1.0.0)
+    betterdoc-website-templating (2.0.0)
       httparty (~> 0.17.3)
       rails (>= 6.0.0)
 
@@ -189,4 +189,4 @@ DEPENDENCIES
   rubocop-performance (~> 1.5.1)
 
 BUNDLED WITH
-   2.0.2
+   2.1.0
