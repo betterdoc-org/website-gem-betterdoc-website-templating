@@ -91,9 +91,7 @@ class HelloWorldController < ApplicationController
   def resolve_template(service_content)
     template_engine = Betterdoc::Website::Templating::Engine.new
     template_engine.template_location = "http://www.example.com/test/template"
-    template_engine.content = service_content
-    template_engine.title = "The page title"
-    template_engine.resolve_content 
+    template_engine.resolve_content(title: "The page title", content: service_content) 
   end
 
 end
@@ -118,6 +116,8 @@ end
 
 ## Configuration
 
+### Engine
+
 The `Engine` can be configured with a set properties that specify how the replacement will be performed.
 
 The following properties can be set at an `Betterdoc::Website::Templating::Engine` object. 
@@ -126,12 +126,87 @@ If they are not set explicitely, most of them have a default setting that will b
 Required means that the value **must** be set either explicitely or by having an environment variable. 
 If none is provided the `resolve` method call will fail with an exception.
 
-| Property | Default environment variable | Required | Default | Type |
-| -------- | ---------------------------- | -------- | ------- | ---- |
-| `template_location` | `TEMPLATING_TEMPLATE_LOCATION` | Yes | | The location of the template that should be used during the evaluation. If this location starts with either `http` or `https` it will be considered a URL and will be loaded from the specified endpoint over the network. In all other case the location is being considered a file on the local file system. |
-| `template_auth_username` | `TEMPLATING_AUTH_USERNAME` | No | | The username to be used when accessing the template via network using HTTP basic auth. |
-| `template_auth_password` | `TEMPLATING_AUTH_PASSWORD` | No | | The password to be used when accessing the template via network using HTTP basic auth. |
-| `content` |  | Yes | | The content to be used. |
-| `content_placeholder` | `TEMPLATING_CONTENT_PLACEHOLDER` | No | `INCLUDE_CONTENT_HERE` | The placeholder within the template that should be replaced with the content from the service. |
-| `title` | `TEMPLATING_TITLE` | No | `BetterDoc` | The title to be used. |
-| `title_placeholder` | `TEMPLATING_TITLE_PLACEHOLDER` | No | `INCLUDE_TITLE_HERE` | The placeholder within the template that should be replaced with the title. |
+| Property | Default environment variable | Required | Description |
+| -------- | ---------------------------- | -------- | ----------- |
+| `template_location` | `TEMPLATING_TEMPLATE_LOCATION` | Yes | The location of the template that should be used during the evaluation. If this location starts with either `http` or `https` it will be considered a URL and will be loaded from the specified endpoint over the network. In all other case the location is being considered a file on the local file system. |
+| `template_auth_username` | `TEMPLATING_AUTH_USERNAME` | No | The username to be used when accessing the template via network using HTTP basic auth. |
+| `template_auth_password` | `TEMPLATING_AUTH_PASSWORD` | No | The password to be used when accessing the template via network using HTTP basic auth. |
+
+## Dialects
+
+The different dialects have additional configuration options on their own
+
+### `MustacheDialect`
+
+The `MustacheDialect` can either be set explicitely (see below) and will be implicitely selected if no dialect has been set explicitely **and** the template path ends with `.mustache` or `.mustache.html`.
+
+#### Usage
+
+Template:
+
+```html
+<body>Hello {{name}}</body>
+```
+
+Ruby code:
+
+```ruby
+engine = Betterdoc::Website::Templating::Engine.new
+engine.template_location = "http://www.example.com/template"
+engine.dialect = Betterdoc::Website::Templating::Dialects::Mustache.new
+result = engine.resolve_content(name: "my_name")
+```
+
+Output:
+
+```html
+<body>Hello my_name</body>
+```
+
+### `SimpleDialect`
+
+The `SimpleDialect` will be selected automatically if no dialect has been selected explicitely and the template name doesn't match the pattern for the `MustacheDialect` (see above).
+
+#### Usage
+
+Template:
+
+```html
+<head>
+  <title>INCLUDE_TITLE_HERE</title>
+</head>
+<body>INCLUDE_CONTENT_HERE</body>
+```
+
+Ruby code:
+
+```ruby
+engine = Betterdoc::Website::Templating::Engine.new
+engine.template_location = "http://www.example.com/template"
+engine.dialect = Betterdoc::Website::Templating::Dialects::SimpleDialect.new
+result = engine.resolve_content(title: "a_title", content: "a_content")
+```
+
+Output:
+
+```html
+<head>
+  <title>a_title</title>
+</head>
+<body>a_content</body>
+```
+
+#### Required elements in the context
+
+| Context key | Required | Default | Description |
+| ----------- | -------- | ------- | ---- |
+| `:content` | Yes | | The content to be placed into the template. |
+| `:title` | No | `BetterDoc` | The title to be placed into the template. |
+
+
+#### Environment variables
+
+| Property | Default environment variable | Default | Type |
+| -------- | ---------------------------- | ------- | ---- |
+| `content_placeholder` | `TEMPLATING_CONTENT_PLACEHOLDER` | `INCLUDE_CONTENT_HERE` | The placeholder within the template that should be replaced with the content from the service. |
+| `title_placeholder` | `TEMPLATING_TITLE_PLACEHOLDER` | `INCLUDE_TITLE_HERE` | The placeholder within the template that should be replaced with the title. |
