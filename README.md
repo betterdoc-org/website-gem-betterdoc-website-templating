@@ -93,7 +93,7 @@ class HelloWorldController < ApplicationController
     template_engine.template_location = "http://www.example.com/test/template"
     template_engine.content = service_content
     template_engine.title = "The page title"
-    template_engine.resolve_template 
+    template_engine.resolve_content 
   end
 
 end
