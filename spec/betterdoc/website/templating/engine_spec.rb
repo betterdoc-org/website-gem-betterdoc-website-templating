@@ -7,16 +7,33 @@ describe Betterdoc::Website::Templating::Engine do
 
   describe "#resolve_content" do
     describe "with valid configuration" do
-      it "should resolve the content" do
-        dummy_dialect = double
-        expect(dummy_dialect).to receive(:resolve_content).with(eq('aa TITLE_PLACEHOLDER bb CONTENT_PLACEHOLDER cc'), hash_including(:foo)).and_return('resolved content')
+      describe "with explicit dialect" do
+        it "should resolve the content" do
+          dummy_dialect = double
+          expect(dummy_dialect).to receive(:resolve_content).with(eq('aa TITLE_PLACEHOLDER bb CONTENT_PLACEHOLDER cc'), hash_including(:foo)).and_return('resolved content')
 
-        engine = Betterdoc::Website::Templating::Engine.new
-        engine.template_dialect = dummy_dialect
-        expect(engine).to receive(:resolve_template).and_return('aa TITLE_PLACEHOLDER bb CONTENT_PLACEHOLDER cc')
+          engine = Betterdoc::Website::Templating::Engine.new
+          engine.template_location = 'foo_template_location'
+          engine.template_dialect = dummy_dialect
+          expect(engine).to receive(:resolve_template).with(eq('foo_template_location')).and_return('aa TITLE_PLACEHOLDER bb CONTENT_PLACEHOLDER cc')
 
-        engine_result = engine.resolve_content(foo: 'bar')
-        expect(engine_result).to eq('resolved content')
+          engine_result = engine.resolve_content(foo: 'bar')
+          expect(engine_result).to eq('resolved content')
+        end
+      end
+      describe "without explicit dialect" do
+        it "should resolve the content using MustacheDialect by analyzing the template location" do
+          engine = Betterdoc::Website::Templating::Engine.new
+          engine.template_location = "foo/bar.mustache.html"
+          expect(engine).to receive(:resolve_template).and_return('aa {{title}} bb {{content}} cc')
+          expect(engine.resolve_content(title: 'x_title', content: 'x_content')).to eq ('aa x_title bb x_content cc')
+        end
+        it "should resolve the content using SimpleDialect by analyzing the template location" do
+          engine = Betterdoc::Website::Templating::Engine.new
+          engine.template_location = "foo/bar"
+          expect(engine).to receive(:resolve_template).and_return('aa INCLUDE_TITLE_HERE bb INCLUDE_CONTENT_HERE cc')
+          expect(engine.resolve_content(title: 'x_title', content: 'x_content')).to eq ('aa x_title bb x_content cc')
+        end
       end
     end
     describe "with invalid configuration" do

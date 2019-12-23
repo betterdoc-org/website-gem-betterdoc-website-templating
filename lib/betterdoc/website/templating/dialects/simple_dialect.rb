@@ -4,7 +4,6 @@ module Betterdoc
   module Website
     module Templating
       module Dialects
-
         class SimpleDialect
 
           attr_accessor :content_placeholder
@@ -47,7 +46,6 @@ module Betterdoc
           end
 
         end
-
       end
     end
   end

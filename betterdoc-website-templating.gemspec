@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
   spec.add_dependency 'httparty', '~> 0.17.3'
+  spec.add_dependency 'mustache', '~> 1.0'
   spec.add_dependency 'rails', '>= 6.0.0'
   spec.add_development_dependency 'rspec-rails', '~> 3.9.0'
   spec.add_development_dependency 'rspec_junit_formatter', '~> 0.4.1'

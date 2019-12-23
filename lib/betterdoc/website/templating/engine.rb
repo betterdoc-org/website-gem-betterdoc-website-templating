@@ -15,25 +15,20 @@ module Betterdoc
         attr_accessor :template_auth_password
         attr_accessor :template_dialect
 
-        def initialize
-          @template_dialect = Betterdoc::Website::Templating::Dialects::SimpleDialect.new
-        end
-
         def resolve_content(context = {})
-          @template_dialect.resolve_content(resolve_template, resolve_template_context(context))
+          template_location = @template_location || ENV['TEMPLATING_TEMPLATE_LOCATION']
+          raise Betterdoc::Website::Templating::Errors::ConfigurationError, "No template_location specified and no default value found via environment variable" if template_location.nil? || template_location.length <= 0
+
+          template_content = resolve_template(template_location)
+          template_context = resolve_template_context(context)
+          template_dialect = resolve_template_dialect(template_location)
+          template_dialect.resolve_content(template_content, template_context)
         end
 
         private
 
-        def resolve_template_context(context)
-          {}.merge(context)
-        end
-
-        def resolve_template
-          template_location = @template_location || ENV['TEMPLATING_TEMPLATE_LOCATION']
-          raise Betterdoc::Website::Templating::Errors::ConfigurationError, "No template_location specified and no default value found via environment variable" if template_location.nil? || template_location.length <= 0
-
-          return resolve_template_loader(template_location).load_template
+        def resolve_template(template_location)
+          resolve_template_loader(template_location).load_template
         end
 
         def resolve_template_loader(template_location)
@@ -45,6 +40,21 @@ module Betterdoc
           else
             Betterdoc::Website::Templating::Loaders::LocalTemplateLoader.new(template_location)
           end
+        end
+
+        def resolve_template_context(context)
+          {}.merge(context)
+        end
+
+        def resolve_template_dialect(template_location)
+          @template_dialect || resolve_template_dialect_from_template_location(template_location)
+        end
+
+        def resolve_template_dialect_from_template_location(template_location)
+          return Betterdoc::Website::Templating::Dialects::MustacheDialect.new if template_location.end_with?('.mustache.html')
+          return Betterdoc::Website::Templating::Dialects::MustacheDialect.new if template_location.end_with?('.mustache')
+
+          Betterdoc::Website::Templating::Dialects::SimpleDialect.new
         end
 
       end
