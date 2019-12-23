@@ -9,7 +9,7 @@ module Betterdoc
         initializer 'betterdoc.website.templating.initialization' do
           ActiveSupport.on_load(:action_controller) do
             class ActionController::Base
-              include Betterdoc::Website::Templating::Controllers::Concerns::AuthenticationConcern
+              include Betterdoc::Website::Templating::Controllers::Concerns::TemplatingConcern
             end
           end
         end
