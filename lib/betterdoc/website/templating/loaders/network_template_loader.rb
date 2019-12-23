@@ -1,4 +1,4 @@
-require 'net/http'
+require 'httparty'
 require_relative '../errors/template_not_found_error'
 require_relative '../errors/template_loading_error'
 
