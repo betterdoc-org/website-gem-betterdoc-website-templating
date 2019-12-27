@@ -138,7 +138,7 @@ The different dialects have additional configuration options
 
 ### `MustacheDialect`
 
-The `MustacheDialect` can either be set explicitely (see below) and will be implicitely selected if no dialect has been set explicitely **and** the template path ends with `.mustache` or `.mustache.html`.
+The `MustacheDialect` can either be set explicitely (see below) and will be implicitely selected if no dialect has been set explicitly **and** the template path ends with `.mustache` or `.mustache.html`.
 
 #### Usage
 
