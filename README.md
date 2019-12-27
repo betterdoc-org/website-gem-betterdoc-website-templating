@@ -134,7 +134,7 @@ If none is provided the `resolve` method call will fail with an exception.
 
 ## Dialects
 
-The different dialects have additional configuration options on their own
+The different dialects have additional configuration options
 
 ### `MustacheDialect`
 
