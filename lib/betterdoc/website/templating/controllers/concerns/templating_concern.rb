@@ -3,7 +3,7 @@ module Betterdoc
     module Templating
       module Controllers
         module Concerns
-          module AuthenticationConcern
+          module TemplatingConcern
             extend ActiveSupport::Concern
 
             def render_in_website_template(view, options = {})
