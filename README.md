@@ -138,7 +138,7 @@ The different dialects have additional configuration options
 
 ### `MustacheDialect`
 
-The `MustacheDialect` can either be set explicitely (see below) and will be implicitely selected if no dialect has been set explicitly **and** the template path ends with `.mustache` or `.mustache.html`.
+The `MustacheDialect` is a powerful replacement dialect that will replace all the Mustache placeholders with their values provided in the replacement context.
 
 #### Usage
 
@@ -163,9 +163,14 @@ Output:
 <body>Hello my_name</body>
 ```
 
+#### Selection
+
+- The dialect can either be set explicitely (as seen in the example above).
+- The dialect will be selected automatically if no dialect has been set explicitly **and** the template path ends with `.mustache` or `.mustache.html`.
+
 ### `SimpleDialect`
 
-The `SimpleDialect` will be selected automatically if no dialect has been selected explicitely and the template name doesn't match the pattern for the `MustacheDialect` (see above).
+The `SimpleDialect` replaced two strings within the template (the first one is expected to contain the title of the page, the second one is exptected to contain the actual content). 
 
 #### Usage
 
@@ -195,6 +200,11 @@ Output:
 </head>
 <body>a_content</body>
 ```
+
+#### Selection
+
+- The dialect can either be set explicitely (as seen in the example above).
+- The dialect will be selected automatically if no dialect has been selected explicitely and the template name doesn't match the pattern for the `MustacheDialect` (see above).
 
 #### Required elements in the context
 
